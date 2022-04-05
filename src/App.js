@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline } from "@mui/material";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Container from "@mui/material/Container";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const theme = createTheme({
+	typography: {
+		fontFamily: ["Poppins"].join(","),
+	},
+});
+
+const App = () => {
+	return (
+		<>
+			<CssBaseline />
+			<ThemeProvider theme={theme}>
+				<Container disableGutters maxWidth="xl">
+					<Router>
+						<Routes>
+							<Route exact path="/" element={<div>Hello</div>} />
+						</Routes>
+					</Router>
+				</Container>
+			</ThemeProvider>
+		</>
+	);
+};
 
 export default App;
