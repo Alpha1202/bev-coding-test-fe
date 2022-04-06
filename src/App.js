@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 
+import LandingPage from "./Screens/LandingPage"
+
 const theme = createTheme({
 	typography: {
 		fontFamily: ["Poppins"].join(","),
@@ -17,7 +19,7 @@ const App = () => {
 				<Container disableGutters maxWidth="xl">
 					<Router>
 						<Routes>
-							<Route exact path="/" element={<div>Hello</div>} />
+							<Route exact path="/" element={<LandingPage />} />
 						</Routes>
 					</Router>
 				</Container>
