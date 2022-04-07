@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavbarWrapper, ToolBar, Logo, NavbarContainer, MenuContainer, IconButtonWrapper, Menuicon } from "./navbar.elements";
+import { NavbarWrapper, ToolBar, Logo, NavbarContainer, MenuContainer, IconButtonWrapper, Menuicon, AvatarIcon } from "./navbar.elements";
 
 const Navbar = ({ open, handleClickOpen }) => {
 	// const [openDialog, setOpenDialog] = useState(true);
@@ -9,11 +9,11 @@ const Navbar = ({ open, handleClickOpen }) => {
 	};
 
 	return (
-		<NavbarWrapper position="static" sx={{ boxShadow: 0 }}>
+		<NavbarWrapper dashboard position="static" sx={{ boxShadow: 0 }}>
 			<NavbarContainer maxWidth="xl">
 				<ToolBar disableGutters>
-					<Logo variant="h6" noWrap component="div">
-						Tavern
+					<Logo dashboard variant="h6" noWrap component="div">
+						Dashboard
 					</Logo>
 					<MenuContainer>
 						<IconButtonWrapper

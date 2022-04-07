@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from "@mui/material";
 
 import {
@@ -14,14 +14,20 @@ import {
 
 import CarouselWrapper from "../../components/carousel";
 import Navbar from "../../components/Navbar";
+import Dialog from "../../components/Dialog";
 import { landingPageData } from "./data";
 
 const LandingPage = () => {
 	const id = useId();
+	const [openDialog, setOpenDialog] = useState(true);
+
+	const handleClickOpen = (toggleState) => {
+		setOpenDialog(toggleState);
+	};
 
 	return (
 		<MainContainer>
-			<Navbar />
+			<Navbar open={openDialog} handleClickOpen={handleClickOpen} />
 			<LeftSectionContainer>
 				<CarouselWrapper>
 					{landingPageData.map((data) => (
@@ -35,10 +41,13 @@ const LandingPage = () => {
 				</CarouselWrapper>
 			</LeftSectionContainer>
 			<RightSectionContainer>
+		
 				<ImageContainer>
 					<Image component="img" src="https://res.cloudinary.com/de8vrxbqq/image/upload/v1649221418/inbev/main_ps2qin.jpg" alt="hero" loading="lazy" />
 				</ImageContainer>
+		
 			</RightSectionContainer>
+			<Dialog open={openDialog} handleClickOpen={handleClickOpen}/>
 		</MainContainer>
 	);
 };
