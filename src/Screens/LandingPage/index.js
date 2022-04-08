@@ -19,7 +19,7 @@ import { landingPageData } from "./data";
 
 const LandingPage = () => {
 	const id = useId();
-	const [openDialog, setOpenDialog] = useState(true);
+	const [openDialog, setOpenDialog] = useState(false);
 
 	const handleClickOpen = (toggleState) => {
 		setOpenDialog(toggleState);
@@ -41,13 +41,11 @@ const LandingPage = () => {
 				</CarouselWrapper>
 			</LeftSectionContainer>
 			<RightSectionContainer>
-		
 				<ImageContainer>
 					<Image component="img" src="https://res.cloudinary.com/de8vrxbqq/image/upload/v1649221418/inbev/main_ps2qin.jpg" alt="hero" loading="lazy" />
 				</ImageContainer>
-		
 			</RightSectionContainer>
-			<Dialog open={openDialog} handleClickOpen={handleClickOpen}/>
+			<Dialog open={openDialog} handleClickOpen={handleClickOpen} />
 		</MainContainer>
 	);
 };

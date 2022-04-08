@@ -1,15 +1,26 @@
 import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { FormContainer, FormTitle, TextFieldBox, Dividers, ButtonWrapper, Links } from "../LoginForm/loginform.elements";
 import Input from "../Input";
 import Button from "../Button";
 
+import { resetPasswordTokenRequest, resetPasswordRequest } from "../../store/actions/reset-password";
+
 const ForgotPasswordForm = ({ handleToggleForms }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { enqueueSnackbar } = useSnackbar();
+
 	const [email, setEmail] = useState("");
 	const [showCodeInput, setShowCodeInput] = useState(false);
 	const [password, setPassword] = useState("");
 	const [cpassword, setCPassword] = useState("");
 	const [resetCode, setResetCode] = useState("");
+
+	const [resetToken, setResetToken] = useState("");
 
 	const handleEmailChange = (value) => {
 		setEmail(value);
@@ -26,6 +37,88 @@ const ForgotPasswordForm = ({ handleToggleForms }) => {
 	const handleToggleForm = (type) => {
 		handleToggleForms(type);
 	};
+
+	const handleSubmit = async () => {
+		if (!showCodeInput) {
+			if (!email) {
+				enqueueSnackbar("Please enter a valid email", {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "error",
+				});
+			}
+			const response = await dispatch(resetPasswordTokenRequest({ email }));
+
+			setResetCode(response.data[0].tempToken);
+			setResetToken(response.data[0].token);
+
+			if (response.status === "success") {
+				setShowCodeInput(true);
+
+			} else {
+				enqueueSnackbar(response.message || response.error.email, {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "error",
+				});
+			}
+		} else {
+			if (!password) {
+				enqueueSnackbar("Please enter a new password", {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "error",
+				});
+			}
+			if (password !== cpassword) {
+				enqueueSnackbar("Passwords do not match", {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "error",
+				});
+			}
+			const payload = {
+				new_password: password,
+				confirm_password: cpassword,
+			};
+
+			
+			const response = await dispatch(resetPasswordRequest(resetToken, payload));
+
+			if (response.status === "success") {
+				enqueueSnackbar("Password reset Successful", {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "success",
+				});
+				handleToggleForm("login")
+			} else {
+				enqueueSnackbar(response.message || response.error.new_password || response.error.confirm_password, {
+					anchorOrigin: {
+						vertical: "top",
+						horizontal: "right",
+					},
+					preventDuplicate: true,
+					variant: "error",
+				});
+			}
+		}
+	};
 	return (
 		<FormContainer
 			component="form"
@@ -37,7 +130,16 @@ const ForgotPasswordForm = ({ handleToggleForms }) => {
 		>
 			<FormTitle variant="h4">Forgot Password</FormTitle>
 			<TextFieldBox>
-				<Input id="login-form-username" label="E-mail" required={true} type="email" value={email} handleChange={handleEmailChange} hasAdornment={false} />
+				<Input
+					id="forgot-password-form-email"
+					disabled={showCodeInput}
+					label="E-mail"
+					required={true}
+					type="email"
+					value={email}
+					handleChange={handleEmailChange}
+					hasAdornment={false}
+				/>
 			</TextFieldBox>
 
 			{showCodeInput && (
@@ -47,10 +149,11 @@ const ForgotPasswordForm = ({ handleToggleForms }) => {
 							id="forgot-password-form-code"
 							label="Code"
 							required={true}
-							type="number"
+							type="text"
 							value={resetCode}
 							handleChange={handleResetCodeChange}
 							hasAdornment={false}
+							disabled={resetCode}
 						/>
 					</TextFieldBox>
 
@@ -91,7 +194,7 @@ const ForgotPasswordForm = ({ handleToggleForms }) => {
 			)}
 
 			<ButtonWrapper>
-				<Button primary variant="contained" label={showCodeInput ? "Send" : "Continue"} />
+				<Button onClick={handleSubmit} primary variant="contained" label={showCodeInput ? "Send" : "Continue"} />
 			</ButtonWrapper>
 
 			<Dividers flexItem>OR</Dividers>

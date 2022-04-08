@@ -41,7 +41,7 @@ export const CarouselTitle = styled(Typography)`
 `;
 
 export const CarouselText = styled(Typography)`
-	color: ${COLORS.grey};
+	color: grey;
 `;
 
 export const ImageContainer = styled(Box)`

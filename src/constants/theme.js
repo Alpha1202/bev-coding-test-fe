@@ -12,7 +12,7 @@ export const COLORS = {
   lightBlue: '#5C9BD6',
   darkText: '#0A1A29',
   greyText: '#5C5F69',
-  borderGrey: '#C0C0C0',
+  grey: '#C0C0C0',
   brown: "#6E2827"
 };
 

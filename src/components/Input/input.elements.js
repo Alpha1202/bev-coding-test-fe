@@ -23,6 +23,4 @@ export const Outlinedinput = styled(OutlinedInput)`
 
 `;
 
-export const Inputadornment = styled(InputAdornment)`
-
-`;
+export const Inputadornment = styled(InputAdornment)``;
