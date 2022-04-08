@@ -1,16 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Slider, DialogContainer, DialogBoxWrapper, SliderNav, DialogActionButton, DialogAction, DialogFormsContainer } from "./dialog.elements";
 
 import { NavbarWrapper, ToolBar, Logo, NavbarContainer, MenuContainer, Closeicon, BackIcon, IconButtonWrapper, Menuicon } from "../Navbar/navbar.elements";
 
+import { loginCleanUp } from "../../store/actions/login";
+
 const DashboardDialog = ({ open, handleClickOpen, toggleViews }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const handleClose = () => {
 		handleClickOpen(false);
 	};
 
 	const handleToggleViews = (type) => {
 		toggleViews(type);
+	};
+
+	const handleLogout = () => {
+		localStorage.removeItem("token");
+		dispatch(loginCleanUp());
+		navigate("/");
 	};
 
 	return (
@@ -32,7 +44,7 @@ const DashboardDialog = ({ open, handleClickOpen, toggleViews }) => {
 						<DialogActionButton onClick={() => handleToggleViews("history")}>History</DialogActionButton>
 					</DialogAction>
 					<DialogAction>
-						<DialogActionButton>Logout</DialogActionButton>
+						<DialogActionButton onClick={() => handleLogout()}>Logout</DialogActionButton>
 					</DialogAction>
 				</DialogBoxWrapper>
 			</NavbarContainer>

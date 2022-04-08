@@ -18,13 +18,15 @@ const Input = ({
 	handleChange,
 	handleClickShowPassword,
 	type,
-	hidden
+	hidden,
+	disabled
 }) => {
 	return (
 		<Formcontrol variant="outlined">
 			<Inputlabel htmlFor={id}>{label}</Inputlabel>
 			<Outlinedinput
 				error={error}
+				disabled={disabled}
 				required={required}
 				defaultValue={defaultValue}
 				helperText={helperText}

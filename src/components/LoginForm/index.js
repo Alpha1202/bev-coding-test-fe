@@ -1,12 +1,21 @@
 import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { FormContainer, FormTitle, TextFieldBox, Dividers, ButtonWrapper, Links } from "./loginform.elements";
 import Input from "../Input";
 import Button from "../Button";
 
-const LoginForm = ({ handleToggleForms  }) => {
+import { loginRequest } from "../../store/actions/login";
+
+const LoginForm = ({ handleToggleForms }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const { enqueueSnackbar } = useSnackbar();
 
 	const handleEmailChange = (value) => {
 		setEmail(value);
@@ -16,8 +25,54 @@ const LoginForm = ({ handleToggleForms  }) => {
 	};
 
 	const handleToggleForm = (type) => {
-		handleToggleForms(type)
-	}
+		handleToggleForms(type);
+	};
+
+	const handleFormSubmit = async () => {
+		if (!email) {
+			enqueueSnackbar("Please enter a valid email", {
+				anchorOrigin: {
+					vertical: "top",
+					horizontal: "right",
+				},
+				preventDuplicate: true,
+				variant: "error",
+			});
+		}
+		if (!password) {
+			enqueueSnackbar("Please enter your password", {
+				anchorOrigin: {
+					vertical: "top",
+					horizontal: "right",
+				},
+				preventDuplicate: true,
+				variant: "error",
+			});
+		}
+
+		const response = await dispatch(loginRequest({ email, password }));
+
+		if (response.status === "success") {
+			enqueueSnackbar("Login Successful", {
+				anchorOrigin: {
+					vertical: "top",
+					horizontal: "right",
+				},
+				preventDuplicate: true,
+				variant: "success",
+			});
+			navigate("/dashboard");
+		} else {
+			enqueueSnackbar(response.message ||response.error.password || response.error.email, {
+				anchorOrigin: {
+					vertical: "top",
+					horizontal: "right",
+				},
+				preventDuplicate: true,
+				variant: "error",
+			});
+		}
+	};
 	return (
 		<FormContainer
 			component="form"
@@ -45,23 +100,18 @@ const LoginForm = ({ handleToggleForms  }) => {
 			</TextFieldBox>
 
 			<TextFieldBox normal component="span">
-				<Links
-					component="button"
-					variant="body2"
-					onClick={() => handleToggleForm('forgotpassword')}
-					underline="hover"
-				>
+				<Links component="button" variant="body2" onClick={() => handleToggleForm("forgotpassword")} underline="hover">
 					Forgot Password?
 				</Links>
 			</TextFieldBox>
 
 			<ButtonWrapper>
-				<Button primary variant="contained" label="Login" />
+				<Button onClick={handleFormSubmit} primary variant="contained" label="Login" />
 			</ButtonWrapper>
 
 			<Dividers flexItem>OR</Dividers>
 			<ButtonWrapper>
-				<Button onClick={() => handleToggleForm('signup')} variant="outlined" label="Sign up" />
+				<Button onClick={() => handleToggleForm("signup")} variant="outlined" label="Sign up" />
 			</ButtonWrapper>
 		</FormContainer>
 	);

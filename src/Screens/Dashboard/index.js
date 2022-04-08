@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { MainContainer } from "../LandingPage/landingPage.elements";
 import { SectionContainer } from "./dashboard.elements";
@@ -9,6 +10,8 @@ import Navbar from "../../components/Navbar/dashboard.navbar";
 import Dialog from "../../components/Dialog/dashboard.dialog";
 
 const Dashboard = () => {
+	const navigate = useNavigate();
+
 	const [openDialog, setOpenDialog] = useState(false);
 	const [overview, setOverview] = useState(true);
 	const [profile, setProfile] = useState(false);
@@ -17,6 +20,15 @@ const Dashboard = () => {
 	const handleClickOpen = (toggleState) => {
 		setOpenDialog(toggleState);
 	};
+
+	const fetchToken = async () => {
+		const token = await JSON.parse(localStorage.getItem("token"));
+		if (!token) return navigate("/");
+	};
+
+	useEffect(() => {
+		fetchToken();
+	});
 
 	const handleToggleViews = (type) => {
 		setOpenDialog(false);
